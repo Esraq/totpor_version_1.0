@@ -1,28 +1,69 @@
+# Enable URL Rewriting
 <IfModule mod_rewrite.c>
-    <IfModule mod_negotiation.c>
-        Options -MultiViews -Indexes
-    </IfModule>
-
     RewriteEngine On
 
-    # Handle Authorization Header
-    RewriteCond %{HTTP:Authorization} .
-    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    # Redirect www to non-www (optional)
+    RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+    RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 
-    # Redirect Trailing Slashes If Not A Folder...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} (.+)/$
-    RewriteRule ^ %1 [L,R=301]
+    # Redirect HTTP to HTTPS (optional)
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-    # Send Requests To Front Controller...
-    RewriteCond %{REQUEST_FILENAME} !-d
+    # Handle Clean URLs
     RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^ index.php [L]
 </IfModule>
 
-# php -- BEGIN cPanel-generated handler, do not edit
-# Set the “ea-php82” package as the default “PHP” programming language.
-<IfModule mime_module>
-  AddHandler application/x-httpd-ea-php82___lsphp .php .php8 .phtml
+# Set Default Directory Index
+DirectoryIndex index.php index.html
+
+# Deny Access to Sensitive Files
+<Files .htaccess>
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+<Files composer.json>
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+<Files .env>
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Caching (optional)
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/html "access 1 month"
+    ExpiresByType text/css "access 1 month"
+    ExpiresByType text/javascript "access 1 month"
+    ExpiresByType image/jpeg "access 1 year"
+    ExpiresByType image/png "access 1 year"
+    ExpiresByType image/gif "access 1 year"
+    ExpiresByType application/javascript "access 1 month"
+    ExpiresByType application/x-icon "access 1 year"
 </IfModule>
-# php -- END cPanel-generated handler, do not edit
+
+# Disable Directory Listing
+Options -Indexes
+
+# PHP Settings (optional)
+<IfModule mod_php.c>
+    php_value upload_max_filesize 64M
+    php_value post_max_size 64M
+    php_value memory_limit 128M
+    php_value max_execution_time 300
+    php_value max_input_time 300
+</IfModule>
+
+# Security Headers (optional)
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+</IfModule>
