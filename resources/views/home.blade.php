@@ -8,7 +8,7 @@
       <div class="slides">
         <!-- Repeat the slides for seamless looping -->
         <div class="slide">
-          <img src="/img/img1.jpg" alt="Cooking Task" />
+          <img src="./img/img1.jpg" alt="Cooking Task" />
           <div class="overlay">
             <h1>
               Find The Perfect Job That <br />
@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="slide">
-          <img src="/img/img2.jpg" alt="Cooking Task" />
+          <img src="./img/img2.jpg" alt="Cooking Task" />
           <div class="overlay">
             <h1>
               Find The Perfect Job That <br />
@@ -34,7 +34,7 @@
           </div>
         </div>
         <div class="slide">
-          <img src="/img/img3.jpg" alt="Cooking Task" />
+          <img src="./img/img3.jpg" alt="Cooking Task" />
           <div class="overlay">
             <h1>
               Find The Perfect Job That <br />
